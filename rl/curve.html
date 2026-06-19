@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>Forge RL — self-play learning curve</title>
+<style>
+body{margin:0;background:#0b0e14;color:#c7d0dc;font:13px/1.5 ui-sans-serif,system-ui,sans-serif;padding:20px 24px;}
+h1{font-size:17px;margin:0 0 2px;} .sub{color:#7d8aa0;font-size:12.5px;margin:0 0 14px;}
+.wrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,1fr);gap:20px;align-items:start;max-width:900px;}
+.card{background:#141925;border:1px solid #283142;border-radius:12px;padding:14px;}
+h3{margin:0 0 8px;font-size:13px;} .muted{color:#7d8aa0;font-size:11.5px;}
+.gbar{display:flex;align-items:center;gap:8px;margin:3px 0;font-size:11px;}
+.gbar .l{width:120px;color:#7d8aa0;} .gbar .t{flex:1;height:11px;background:#0008;border-radius:6px;position:relative;overflow:hidden;}
+.gbar .pos{background:#4fc28a;height:100%;border-radius:6px;} .gbar .neg{background:#e0563f;height:100%;border-radius:6px;}
+.gbar .v{width:42px;text-align:right;font-variant-numeric:tabular-nums;}
+b.good{color:#4fc28a;}
+</style></head><body>
+<h1>The Forge — self-play playtester (CEM), learning curve</h1>
+<p class="sub" id="sub">loading…</p>
+<div class="wrap">
+  <div class="card"><h3>Win-rate vs the heuristic pool <span class="muted">(expander · aggressor · bridger · turtle)</span></h3>
+    <svg id="chart" width="520" height="300" viewBox="0 0 520 300"></svg>
+  </div>
+  <div class="card"><h3>What it discovered <span class="muted">(learned weights)</span></h3>
+    <div id="genome"></div>
+    <p class="muted" style="margin-top:10px">Positive = the policy seeks it. The win comes from weighting the <b>Phase-4 siege tower</b> and forward pressure, and <em>down</em>-weighting sitting on owned ground — i.e. it taught itself to rush the siege, the same exploit the Monte-Carlo flags.</p>
+  </div>
+</div>
+<script type="module">
+const F = ["proximity","neutral","enemyOwned","ownOwned","enemyStronghold","siegeTowerP4","contested","homeProximity","isTower"];
+const curve = await (await fetch("../data/rl-curve.json")).json();
+const pol = await (await fetch("../data/rl-policy.json")).json();
+const gen0 = 0, genN = curve[curve.length-1];
+document.getElementById("sub").innerHTML = `From a <b>blank genome</b> (gen 0 = naive play) to <b class="good">${pol.winRate}% win-rate</b> over ${curve.length} generations — learned from scratch, no GPU, dependency-free (CEM). PPO/gymnasium skeleton: <code>rl/forge_env.py</code>.`;
+
+// line chart
+const svg = document.getElementById("chart"), W=520,H=300,P=34;
+const X = g => P + (g/(curve.length))*(W-2*P);
+const Y = v => H-P - (v/100)*(H-2*P);
+const NS="http://www.w3.org/2000/svg";
+function add(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;}
+for(const v of [0,50,100]){ add("line",{x1:P,y1:Y(v),x2:W-P,y2:Y(v),stroke:"#283142","stroke-dasharray":"3 4"}); const t=add("text",{x:6,y:Y(v)+3,fill:"#7d8aa0","font-size":10}); t.textContent=v+"%"; }
+const pts=[{gen:0,best:0,mean:0},...curve];
+const line=(key,color)=>{ let d=""; pts.forEach((p,i)=>{ d+=(i?"L":"M")+X(p.gen)+" "+Y(p[key])+" "; }); add("path",{d,fill:"none",stroke:color,"stroke-width":2.2}); };
+line("mean","#3d92e0"); line("best","#f2c14e");
+pts.forEach(p=>{ add("circle",{cx:X(p.gen),cy:Y(p.best),r:2.6,fill:"#f2c14e"}); });
+const lg=add("text",{x:P+6,y:P+2,fill:"#f2c14e","font-size":11}); lg.textContent="best";
+const lg2=add("text",{x:P+46,y:P+2,fill:"#3d92e0","font-size":11}); lg2.textContent="distribution mean";
+const xl=add("text",{x:W-P-30,y:H-10,fill:"#7d8aa0","font-size":10}); xl.textContent="generation";
+
+// genome bars
+const g=pol.genome, mx=Math.max(...g.map(Math.abs));
+document.getElementById("genome").innerHTML = F.map((name,i)=>{
+  const v=g[i], w=Math.round(Math.abs(v)/mx*100);
+  return `<div class="gbar"><span class="l">${name}</span><span class="t"><span class="${v>=0?'pos':'neg'}" style="width:${w}%"></span></span><span class="v">${v.toFixed(2)}</span></div>`;
+}).join("");
+</script></body></html>

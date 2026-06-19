@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Forge — Territory & Bridges · balance sandbox</title>
+<meta name="description" content="An in-silico playtest for one system of SEED's The Forge: territory control, resource economy, and bridge momentum — with balance levers, an honesty ledger, and a Monte Carlo readout." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <h1>The&nbsp;Forge<span class="sub"> · Territory&nbsp;&amp;&nbsp;Bridges — balance sandbox</span></h1>
+    <p class="tagline">A playable model of one Forge system, with the levers and the Monte&nbsp;Carlo playtest that balance it <em>before</em> 500 bodies hit a field.</p>
+    <p class="venue" id="venue"></p>
+  </div>
+</header>
+
+<main>
+  <!-- LEFT: the live match -->
+  <section class="stage">
+    <div class="scorebar">
+      <div class="team red">
+        <span class="dot"></span> RED
+        <span class="nums">score <b id="score-red">0</b> · sectors <b id="held-red">0</b> · res <b id="res-red">0</b></span>
+      </div>
+      <div class="clock" id="clock">0:00 / 90:00</div>
+      <div class="team blue">
+        <span class="nums">score <b id="score-blue">0</b> · sectors <b id="held-blue">0</b> · res <b id="res-blue">0</b></span>
+        BLUE <span class="dot"></span>
+      </div>
+    </div>
+
+    <div class="phasebar" id="phase">Phase 1/4</div>
+
+    <div class="canvas-wrap">
+      <canvas id="board" width="560" height="460"></canvas>
+      <div class="winner" id="winner"></div>
+      <div class="flash" id="flash"></div>
+    </div>
+
+    <div class="classlegend" id="classes"></div>
+
+    <div class="controls">
+      <button id="btn-play">⏸ Pause</button>
+      <button id="btn-restart">⟳ Restart</button>
+      <label class="ctl">Speed <input type="range" id="speed" min="1" max="20" step="1" value="6" /></label>
+      <label class="ctl chk"><input type="checkbox" id="auto-red" /> Auto-play RED (watch bots)</label>
+      <label class="ctl chk"><input type="checkbox" id="fog" /> Fog of war (RED intel)</label>
+      <label class="ctl">RED <select id="red-bot"></select></label>
+      <label class="ctl">BLUE <select id="blue-bot"></select></label>
+    </div>
+    <p class="hint" id="hint"><b>You are RED.</b> Click a <b>sector</b> to order your squads there (orders take a few seconds to reach them — that's the comms latency lever). Hold ground by keeping bodies on it. From <b>Phase 2</b>, click a dashed <b>ravine crossing</b> with an <b>Engineer</b> present + 120 Supply to build a <b>bridge</b> (shared — the enemy crosses it too).</p>
+  </section>
+
+  <!-- RIGHT: design tooling -->
+  <section class="panel">
+    <nav class="tabs">
+      <button id="tab-levers" class="active">Levers</button>
+      <button id="tab-ledger">Honesty ledger</button>
+      <button id="tab-playtest">Playtest</button>
+    </nav>
+
+    <div id="panel-levers" class="tabpanel active">
+      <p class="muted">Move a lever and watch the live match shift. Then run the playtest to see what it does across hundreds of matches.</p>
+      <div id="levers"></div>
+    </div>
+
+    <div id="panel-ledger" class="tabpanel">
+      <div id="ledger"></div>
+    </div>
+
+    <div id="panel-playtest" class="tabpanel">
+      <p class="muted">You can't cheaply playtest 500 people on a field. So play it in silico — same rules engine, thousands of matches, balance read off the aggregate.</p>
+      <div class="mc-controls">
+        <label>Matches
+          <select id="mc-games">
+            <option value="200">200 (fast)</option>
+            <option value="400" selected>400</option>
+            <option value="800">800 (thorough)</option>
+            <option value="1600">1600 (slow)</option>
+          </select>
+        </label>
+        <button id="btn-mc">▶ Run playtest at current levers</button>
+      </div>
+      <div id="mc-results" class="mc-results">
+        <p class="muted empty">No run yet. The four bot strategies (expander · aggressor · bridger · turtle) will play every matchup at your current settings.</p>
+      </div>
+      <div id="mc-overlay" class="mc-overlay"><div class="spinner"></div>running matches…</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Proof artifact for SEED · The Forge — <b>Game Systems &amp; Mechanics Designer</b>.</span>
+  <span>Aliaskar Bekishev · <a href="https://github.com/Alyasska">github.com/Alyasska</a> · <a href="https://alyasska.github.io">alyasska.github.io</a></span>
+  <span>See <code>DESIGN.md</code> for the reasoning, the levers, and the findings.</span>
+</footer>
+
+<script type="module" src="ui/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "forge-balance-sandbox",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A balance sandbox / in-silico playtest for one system of SEED's The Forge (Territory + Bridges). No build step; package.json exists only so the sim modules run under node for headless testing.",
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  }
+}

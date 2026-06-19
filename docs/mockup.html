@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/>
+<title>The Forge — concept render</title>
+<style>
+:root{--bg:#0b0e14;--panel:#141925;--panel2:#1b2230;--line:#283142;--text:#c7d0dc;--muted:#7d8aa0;--red:#e0563f;--blue:#3d92e0;--gold:#f2c14e;--good:#4fc28a;--warn:#e8a13c;}
+*{box-sizing:border-box;}body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;}
+b{color:#e8eef6;}
+.top{display:flex;align-items:baseline;gap:14px;padding:16px 22px 6px;flex-wrap:wrap;}
+.top h1{margin:0;font-size:19px;}
+.top h1 span{color:var(--muted);font-weight:400;font-size:14px;}
+.badge{font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:5px;background:#3a2a10;color:var(--gold);border:1px solid #5a431a;}
+.sub{color:var(--muted);font-size:12px;}
+.sub b.red{color:var(--red);}.sub b.blue{color:var(--blue);}
+main{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(420px,0.82fr);gap:16px;padding:8px 22px 18px;align-items:start;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;}
+.scorebar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700;letter-spacing:.5px;}
+.scorebar .red{color:var(--red);}.scorebar .blue{color:var(--blue);}
+.scorebar .nums{color:var(--muted);font-weight:400;}.scorebar .nums b{color:var(--text);}
+.clock{color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums;}
+canvas{width:100%;height:auto;display:block;border-radius:9px;border:1px solid var(--line);}
+.caption{color:var(--muted);font-size:11.5px;margin-top:8px;border-left:2px solid var(--line);padding-left:9px;}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--muted);}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block;vertical-align:-1px;margin-right:4px;}
+h3{margin:2px 0 8px;font-size:13px;display:flex;align-items:center;gap:8px;}
+h3 .tool{font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 6px;}
+h4{margin:12px 0 6px;font-size:12px;color:var(--muted);font-weight:500;}
+.stack>.card{margin-bottom:14px;}
+.bar{display:flex;align-items:center;gap:8px;margin:3px 0;font-size:11.5px;}
+.bar .l{width:96px;color:var(--muted);text-transform:capitalize;}
+.bar .t{flex:1;height:13px;background:#0008;border-radius:7px;overflow:hidden;}
+.bar .f{display:block;height:100%;border-radius:7px;background:#4a6b9a;}
+.f.hot{background:var(--warn);}.f.red{background:var(--red);}.f.blue{background:var(--blue);}.f.exploit{background:var(--red);}
+.bar .v{width:64px;text-align:right;font-variant-numeric:tabular-nums;}
+.finding{font-size:11.5px;padding:6px 9px;border-radius:6px;margin:5px 0;background:var(--panel2);border-left:3px solid var(--line);}
+.finding.good{border-left-color:var(--good);}.finding.warn{border-left-color:var(--warn);}.finding.bad{border-left-color:var(--red);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.matrix{border-collapse:collapse;font-size:10.5px;width:100%;}
+.matrix th{color:var(--muted);font-weight:500;padding:2px;}
+.matrix td{text-align:center;padding:3px 0;color:#eef3fa;border:1px solid #0006;font-variant-numeric:tabular-nums;}
+.stat{font-size:11.5px;color:var(--muted);margin:2px 0;}.stat b{color:var(--text);}
+.planes{display:flex;gap:8px;flex-wrap:wrap;}
+.plane{text-align:center;}
+.plane .g{display:grid;grid-template-columns:repeat(6,9px);grid-auto-rows:9px;gap:1px;padding:3px;background:#0006;border-radius:4px;}
+.plane .g i{width:9px;height:9px;border-radius:1px;display:block;}
+.plane span{font-size:9px;color:var(--muted);display:block;margin-top:3px;}
+.levrow{margin:7px 0;}
+.levrow .h{display:flex;justify-content:space-between;font-size:11.5px;}
+.levrow .h b{color:#e8eef6;}.levrow .h .val{color:var(--gold);font-variant-numeric:tabular-nums;}
+.track{height:6px;background:#0008;border-radius:4px;margin-top:4px;position:relative;}
+.track .k{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--blue);border:2px solid #0b0e14;}
+.ledger{font-size:11px;color:var(--muted);margin-top:8px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:8px;}
+.ledger .tag{font-size:9px;text-transform:uppercase;padding:0 5px;border-radius:3px;margin-right:5px;}
+.tag.i{background:#2a5680;color:#cfe4fb;}.tag.t{background:#6b5a1e;color:#f6e7b0;}.tag.x{background:#6e2c24;color:#f6c8c0;}
+.scale{margin:0 22px 22px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.scale .step{font-size:11.5px;color:var(--muted);}.scale .step b{color:var(--text);}
+.scale .arrow{color:var(--gold);font-size:18px;}
+.spark{display:block;}
+</style></head>
+<body>
+<div class="top">
+  <h1>The Forge <span>· Territory &amp; Bridges — live balance + RL playtest</span></h1>
+  <span class="badge">concept · target demo (stage 2)</span>
+  <span class="sub">Field: <b>Lake San Antonio, Bradley CA</b> (real DEM) · watching <b class="red">RL_red·gen240</b> vs <b class="blue">RL_blue·gen240</b></span>
+</div>
+
+<main>
+  <!-- LEFT: the field -->
+  <section class="card">
+    <div class="scorebar">
+      <span class="red">● RED <span class="nums">score <b>312</b> · sectors <b>6</b> · res <b>148</b></span></span>
+      <span class="clock">54:20 / 90:00</span>
+      <span class="blue"><span class="nums">score <b>301</b> · sectors <b>5</b> · res <b>121</b></span> BLUE ●</span>
+    </div>
+    <canvas id="field" width="760" height="540"></canvas>
+    <div class="legend">
+      <span><i style="background:#e0563f"></i>red sectors</span>
+      <span><i style="background:#3d92e0"></i>blue sectors</span>
+      <span><i style="background:#3a4150"></i>neutral</span>
+      <span><i style="background:#f2c14e"></i>bridge (over water)</span>
+      <span><i style="background:#2b6fa0"></i>lake / creek = the ravine</span>
+    </div>
+    <p class="caption">The chokepoints aren't drawn — the venue's real <b>lake &amp; creeks</b> are the ravine that bridges cross, and squad travel-time follows real <b>slope</b>. Dots are squads moving along least-cost paths; rings are capture meters.</p>
+  </section>
+
+  <!-- RIGHT: the four layers, made visible -->
+  <section class="stack">
+    <div class="card">
+      <h3>Balance readout <span class="tool">layer 3 · OpenSpiel</span></h3>
+      <div class="finding good">✓ Side-neutral: Red 49% / Blue 51% over 2,000 matches — the real map is fair.</div>
+      <div class="finding bad">⚠ EXPLOIT: self-play RL converged on a <b>bridge-free-ride + flank</b> line that wins <b>71%</b> — your heuristics never found it.</div>
+      <h4>Win rate by strategy</h4>
+      <div class="bar"><span class="l">RL self-play</span><span class="t"><span class="f exploit" style="width:71%"></span></span><span class="v">71% ⚠</span></div>
+      <div class="bar"><span class="l">aggressor</span><span class="t"><span class="f" style="width:56%"></span></span><span class="v">56%</span></div>
+      <div class="bar"><span class="l">bridger</span><span class="t"><span class="f" style="width:54%"></span></span><span class="v">54%</span></div>
+      <div class="bar"><span class="l">expander</span><span class="t"><span class="f" style="width:48%"></span></span><span class="v">48%</span></div>
+      <div class="bar"><span class="l">turtle</span><span class="t"><span class="f" style="width:25%"></span></span><span class="v">25%</span></div>
+      <div class="row2" style="margin-top:10px;">
+        <div>
+          <h4>Faction fairness</h4>
+          <div class="bar"><span class="l">Red</span><span class="t"><span class="f red" style="width:49%"></span></span><span class="v">49%</span></div>
+          <div class="bar"><span class="l">Blue</span><span class="t"><span class="f blue" style="width:51%"></span></span><span class="v">51%</span></div>
+          <div class="stat"><b>72%</b> snowball · <b>28%</b> comeback</div>
+          <div class="stat"><b>11%</b> dead-time · <b>3%</b> siege fires</div>
+        </div>
+        <div>
+          <h4>Matchup matrix</h4>
+          <table class="matrix"><tr><th></th><th>RL</th><th>agg</th><th>brg</th><th>exp</th></tr>
+            <tr><th>RL</th><td style="background:hsl(130 40% 24%)">50</td><td style="background:hsl(130 45% 34%)">68</td><td style="background:hsl(130 45% 36%)">70</td><td style="background:hsl(130 45% 40%)">77</td></tr>
+            <tr><th>agg</th><td style="background:hsl(0 45% 28%)">32</td><td style="background:hsl(130 40% 24%)">50</td><td style="background:hsl(130 42% 28%)">55</td><td style="background:hsl(130 43% 31%)">60</td></tr>
+            <tr><th>brg</th><td style="background:hsl(0 45% 26%)">30</td><td style="background:hsl(0 41% 27%)">45</td><td style="background:hsl(130 40% 24%)">50</td><td style="background:hsl(130 42% 29%)">57</td></tr>
+            <tr><th>exp</th><td style="background:hsl(0 45% 22%)">23</td><td style="background:hsl(0 43% 25%)">40</td><td style="background:hsl(0 41% 26%)">43</td><td style="background:hsl(130 40% 24%)">50</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>RL brain <span class="tool">layer 4 · gym-microrts skeleton</span></h3>
+      <h4>Observation = stacked planes (terrain already in the tensor)</h4>
+      <div class="planes" id="planes"></div>
+      <div class="row2" style="margin-top:10px;">
+        <div>
+          <h4>Action heatmap <span style="font-size:9px">(where RED commits)</span></h4>
+          <div class="plane"><div class="g" id="action"></div></div>
+        </div>
+        <div>
+          <h4>Learning curve <span style="font-size:9px">(win% vs heuristics)</span></h4>
+          <svg class="spark" width="180" height="74" viewBox="0 0 180 74">
+            <line x1="0" y1="37" x2="180" y2="37" stroke="#283142" stroke-dasharray="3 4"/>
+            <polyline fill="none" stroke="#4fc28a" stroke-width="2" points="0,68 18,64 36,57 54,52 72,40 90,33 108,26 126,22 144,19 162,17 180,16"/>
+            <text x="2" y="12" fill="#7d8aa0" font-size="9">71%</text>
+            <text x="150" y="72" fill="#7d8aa0" font-size="9">gen 240</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Levers + ledger <span class="tool">layer 2 · Machinations economy</span></h3>
+      <div class="levrow"><div class="h"><b>Bridge cost</b><span class="val">60 res</span></div><div class="track"><span class="k" style="left:30%"></span></div></div>
+      <div class="levrow"><div class="h"><b>Resource yield</b><span class="val">1.0×</span></div><div class="track"><span class="k" style="left:34%"></span></div></div>
+      <div class="levrow"><div class="h"><b>Comeback aid</b><span class="val">0.3 ×behind</span></div><div class="track"><span class="k" style="left:38%"></span></div></div>
+      <div class="ledger"><b>Bridge</b> — <span class="tag i">intent</span>open a front + reconnect supply. <span class="tag t">trade-off</span>it's shared: the enemy crosses it too. <span class="tag x">failure</span>too cheap → ravine stops mattering.</div>
+    </div>
+  </section>
+</main>
+
+<div class="scale">
+  <span class="step"><b>now</b> · small bbox · 14 sectors · 3v3 · CPU minutes</span>
+  <span class="arrow">→</span>
+  <span class="step"><b>scale</b> · full venue · 120 sectors · 200 agents · GPU self-play</span>
+  <span class="arrow">→</span>
+  <span class="step">same pipeline, nothing hardcoded to the small size</span>
+  <span class="step" style="margin-left:auto;"><span style="border:1px solid var(--line);border-radius:4px;padding:1px 6px;">tournament loop · Lux AI harness</span></span>
+</div>
+
+<script>
+// ---------- procedural "real DEM" hillshade (California oak hills + a lake) ----------
+const cv=document.getElementById('field'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+function hash(x,y){let n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n);}
+function vnoise(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi;
+  const u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+  const a=hash(xi,yi),b=hash(xi+1,yi),c=hash(xi+1,yi+1),d=hash(xi,yi+1);
+  return a*(1-u)*(1-v)+b*u*(1-v)+d*(1-u)*v+c*u*v;}
+function fbm(x,y){let s=0,a=.5,f=1;for(let o=0;o<5;o++){s+=a*vnoise(x*f,y*f);f*=2;a*=.5;}return s;}
+const SC=120;
+const Ht=new Float32Array(W*H);
+for(let j=0;j<H;j++)for(let i=0;i<W;i++)Ht[j*W+i]=fbm(i/SC+5,j/SC+9);
+// water mask: an irregular lake low-center + a river channel
+function water(i,j){
+  const lx=(i-410)/210,ly=(j-330)/120; const lake=lx*lx+ly*ly + 0.5*(fbm(i/70,j/70)-0.5);
+  const river=Math.abs((j) - (250 + 120*Math.sin(i/130) + 40*Math.sin(i/40))) ; const riv = i>360 && river<14;
+  return lake<1.0 || riv;}
+const img=g.createImageData(W,H),D=img.data;
+function lerp(a,b,t){return a+(b-a)*t;}
+for(let j=0;j<H;j++)for(let i=0;i<W;i++){
+  const k=(j*W+i),p=k*4;
+  if(water(i,j)){const dd=0.5+0.5*vnoise(i/14,j/14);D[p]=20+dd*18;D[p+1]=80+dd*40;D[p+2]=130+dd*45;D[p+3]=255;continue;}
+  const h=Ht[k];
+  const hx=Ht[k+1]-Ht[k-1], hy=Ht[(j+1<H?j+1:j)*W+i]-Ht[(j>0?j-1:j)*W+i];
+  let shade=0.62 - 2.4*hx + 2.4*hy; shade=Math.max(.25,Math.min(1.15,shade));
+  // oak-savanna palette: low olive-green → high tan
+  const r=lerp(95,196,h)*shade, gg=lerp(110,176,h)*shade, b=lerp(64,120,h)*shade;
+  D[p]=r;D[p+1]=gg;D[p+2]=b;D[p+3]=255;
+}
+g.putImageData(img,0,0);
+// faint contour lines
+g.globalAlpha=.10;g.strokeStyle="#000";
+for(let lvl=0.15;lvl<0.9;lvl+=0.12){g.beginPath();for(let i=0;i<W;i+=2){for(let j=0;j<H;j+=2){if(!water(i,j)&&Math.abs(Ht[j*W+i]-lvl)<0.004){g.rect(i,j,1.4,1.4);}}}g.fill();}
+g.globalAlpha=1;
+
+// ---------- overlay: sectors, bridges, squads ----------
+const N='neutral';
+const sectors=[ // x,y,owner,stronghold
+ [80,120,'red',1],[150,260,'red',0],[120,400,'red',0],[250,150,'red',0],[260,360,'red',0],[235,470,'red',0],
+ [690,110,'blue',1],[600,250,'blue',0],[660,390,'blue',0],[520,150,'blue',0],[540,430,'blue',0],
+ [410,90,N,0],[395,500,N,0],[300,260,N,0],
+];
+const col={red:'#e0563f',blue:'#3d92e0',neutral:'#3a4150'};
+// sector cells (soft translucent)
+for(const[x,y,o]of sectors){g.beginPath();g.arc(x,y,42,0,7);g.fillStyle=col[o]+'33';g.fill();}
+// bridges across the water (gold)
+function bridge(a,b){g.strokeStyle='#f2c14e';g.lineWidth=4;g.beginPath();g.moveTo(sectors[a][0],sectors[a][1]);g.lineTo(sectors[b][0],sectors[b][1]);g.stroke();
+ const mx=(sectors[a][0]+sectors[b][0])/2,my=(sectors[a][1]+sectors[b][1])/2;g.fillStyle='#f2c14e';g.beginPath();g.arc(mx,my,3,0,7);g.fill();}
+bridge(13,9); // neutral-center to blue across creek
+bridge(4,10); // red to blue lower across water
+// dashed unbuilt crossing
+g.setLineDash([5,7]);g.strokeStyle='#e0563f';g.lineWidth=2.5;g.beginPath();g.moveTo(sectors[11][0],sectors[11][1]);g.lineTo(sectors[6][0]-30,sectors[6][1]+10);g.stroke();g.setLineDash([]);
+// sector nodes + capture rings
+for(const[x,y,o,s]of sectors){
+ if(s){g.fillStyle=col[o];g.beginPath();g.moveTo(x,y-15);g.lineTo(x+15,y);g.lineTo(x,y+15);g.lineTo(x-15,y);g.closePath();g.fill();}
+ else{g.fillStyle=col[o];g.globalAlpha=.92;g.beginPath();g.arc(x,y,11,0,7);g.fill();g.globalAlpha=1;}
+}
+// capture meter on a contested sector (node 13 center)
+g.strokeStyle='#e0563f';g.lineWidth=3;g.beginPath();g.arc(sectors[13][0],sectors[13][1],17,-1.57,-1.57+4.4);g.stroke();
+g.strokeStyle='#3d92e0';g.lineWidth=3;g.beginPath();g.arc(sectors[10][0],sectors[10][1],17,-1.57,-1.57+2.0);g.stroke();
+// squads: dots clustered + a few traveling
+function squads(x,y,c,n,spread=16){for(let i=0;i<n;i++){const a=i*2.4,r=8+(i%3)*5;g.fillStyle=c;g.beginPath();g.arc(x+Math.cos(a)*r,y+Math.sin(a)*r,3.3,0,7);g.fill();g.strokeStyle='#0009';g.lineWidth=1;g.stroke();}}
+squads(80,120,'#e0563f',3);squads(260,360,'#e0563f',2);squads(300,260,'#e0563f',2);
+squads(690,110,'#3d92e0',3);squads(540,430,'#3d92e0',2);
+// traveling squads along a path (red flanking over a bridge)
+for(const[x,y]of[[330,300],[370,330],[405,350],[460,390]]){g.fillStyle='#e0563f';g.beginPath();g.arc(x,y,3.3,0,7);g.fill();g.strokeStyle='#0009';g.lineWidth=1;g.stroke();}
+g.fillStyle='#e0563f99';g.font='10px sans-serif';g.fillText('▶ RL flank',430,378);
+
+// ---------- observation tensor planes (right panel) ----------
+const planeDefs=[
+ {name:'owner',cells:i=>['#e0563f','#3d92e0','#2b3340'][i%3]},
+ {name:'terrain',cells:i=>['#6b7340','#b6a06a','#2b6fa0','#8a7a52'][i%4]},
+ {name:'resource',cells:i=>`rgba(242,193,78,${(i%5)/5})`},
+ {name:'squads',cells:i=>(i%4===0?'#e0563f':i%5===0?'#3d92e0':'#1b2230')},
+];
+const ph=document.getElementById('planes');
+for(const pd of planeDefs){const d=document.createElement('div');d.className='plane';
+ let cells='';for(let i=0;i<30;i++)cells+=`<i style="background:${pd.cells(i+pd.name.length)}"></i>`;
+ d.innerHTML=`<div class="g">${cells}</div><span>${pd.name}</span>`;ph.appendChild(d);}
+const ac=document.getElementById('action');
+for(let i=0;i<30;i++){const v=[0,0,.2,.6,1,.3,0,0,.1,.9,.5,0,0,0,.2,.7,.4,0,0,0,0,.1,.5,.2,0,0,0,0,0,0][i];
+ ac.innerHTML+=`<i style="background:rgba(224,86,63,${v})"></i>`;}
+</script>
+</body></html>
