@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>Balance readout</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital@0;1&family=IM+Fell+English:ital@0;1&display=swap');
+html,body{margin:0;background:#efe5cf;}
+body{width:1180px;padding:24px 30px;color:#2a2018;font-family:"EB Garamond",Georgia,serif;}
+h1{font-family:"Cinzel",serif;color:#58180d;font-size:30px;margin:0;}
+.sub{font-family:"IM Fell English",serif;font-style:italic;color:#6a5a44;font-size:18px;margin:3px 0 18px;}
+.wrap{display:flex;gap:40px;align-items:flex-start;}
+.col{flex:1;}
+.ct{font-family:"Cinzel",serif;color:#58180d;font-size:21px;margin:0 0 10px;}
+.bar{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:20px;}
+.bar .l{width:150px;color:#3a3020;text-transform:capitalize;}
+.bar .t{flex:1;height:22px;background:#00000018;border-radius:11px;overflow:hidden;border:1px solid #00000022;}
+.bar .f{display:block;height:100%;background:#7a8b5a;border-radius:11px;}
+.f.hot{background:#b8893b;} .f.red{background:#b8341f;} .f.blue{background:#3d6ea5;}
+.bar .v{width:62px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;}
+.stats{display:flex;gap:26px;margin:8px 0 4px;flex-wrap:wrap;font-size:19px;}
+.stats b{font-family:"Cinzel",serif;color:#58180d;font-size:22px;}
+table{border-collapse:collapse;width:100%;margin-top:6px;font-size:18px;}
+th{font-family:"Cinzel",serif;color:#58180d;font-weight:600;padding:5px 4px;text-align:center;}
+td{text-align:center;padding:8px 4px;color:#fff;font-weight:600;font-variant-numeric:tabular-nums;border:1px solid #efe5cf;}
+td.rowh{color:#58180d;background:none;font-family:"Cinzel",serif;text-align:right;padding-right:8px;}
+</style></head><body>
+<h1>Balance Readout</h1>
+<p class="sub">600 matches on the real Lake San Antonio field. Every strategy plays every other, both sides, all seeded.</p>
+<div class="wrap">
+  <div class="col">
+    <div class="ct">Win-rate by strategy</div>
+    <div id="strat"></div>
+    <div class="ct" style="margin-top:18px">Faction fairness (is the map even?)</div>
+    <div id="fac"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="col" style="flex:0.78">
+    <div class="ct">Match-up matrix</div>
+    <div style="font-family:'IM Fell English',serif;font-style:italic;color:#6a5a44;font-size:16px;margin:-4px 0 8px">Each cell: the row's win-rate against the column.</div>
+    <table id="matrix"></table>
+  </div>
+</div>
+<script type="module">
+const mc=await (await fetch("../data/mc-sample.json")).json();
+const label={expander:"Expander",aggressor:"Aggressor",bridger:"Bridger",turtle:"Turtle",rl:"Self-play RL"};
+const bar=(l,p,cls)=>`<div class="bar"><span class="l">${l}</span><span class="t"><span class="f ${cls||''}" style="width:${Math.max(3,p)}%"></span></span><span class="v">${p}%</span></div>`;
+document.getElementById("strat").innerHTML=mc.policies.map(p=>bar(label[p],mc.policyWinPct[p],p===mc.bestPolicy?"hot":"")).join("");
+document.getElementById("fac").innerHTML=bar("Red",mc.factionWinPct.red,"red")+bar("Blue",mc.factionWinPct.blue,"blue");
+document.getElementById("stats").innerHTML=
+ `<span><b>${mc.snowballPct}%</b> lead holds</span><span><b>${mc.comebackPct}%</b> comeback</span><span><b>${mc.deadTimePct}%</b> dead-time</span><span><b>${mc.siegeFiredPct}%</b> sieges fire</span>`;
+const ps=mc.policies, short={expander:"Exp",aggressor:"Agg",bridger:"Brg",turtle:"Tur",rl:"RL"};
+let h="<tr><th></th>"+ps.map(p=>`<th>${short[p]}</th>`).join("")+"</tr>";
+for(const r of ps){h+=`<tr><td class="rowh">${short[r]}</td>`;for(const c of ps){const cell=mc.matchupMatrix[r][c];const v=cell.games?Math.round(100*cell.winsA/cell.games):0;const hue=v>=50?120:0;const light=30+Math.abs(v-50)*0.4;h+=`<td style="background:hsl(${hue} 42% ${light}%)">${v}</td>`;}h+="</tr>";}
+document.getElementById("matrix").innerHTML=h;
+</script></body></html>

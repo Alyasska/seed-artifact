@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
-<title>The Forge — Field Dossier</title>
+<title>The Forge · Field Codex</title>
 <link rel="stylesheet" href="dossier.css">
 </head><body>
 
 <div class="cartouche">
   <div>
-    <div class="t1">THE FORGE</div>
-    <div class="t2">FIELD DOSSIER · BALANCE SANDBOX</div>
+    <div class="t1">The Forge</div>
+    <div class="t2">A Field Codex · Balance Sandbox</div>
   </div>
   <div class="stamp">DESIGN SAMPLE · SEED</div>
   <div class="meta">
@@ -17,79 +17,90 @@
   </div>
 </div>
 
-<p class="lead"><span class="drop">A</span>n <b>in-silico playtest</b> for one system of The Forge — territory, the bridge
-momentum layer, player classes, and a siege endgame. You can't cheaply playtest a 500-person,
-90-minute field game, so this models one system and runs thousands of matches headless to read the
-balance <em>before</em> anyone books a venue. One rules engine drives the live match <b>and</b> the sims —
-a designer/GM pre-flight rig. It is the deliverable the role names: a <b>living design document, balance
-logic, and playtest frameworks</b>, not just code.</p>
+<p class="lead"><span class="drop">T</span>his is a small, playable proof for one piece of The Forge. Think of it as a
+workshop bench, not a finished game. On it, a single system (who controls which ground, and how) can be
+tuned and tested across thousands of trials, long before a real crowd ever gathers. That is what a
+<b>balance sandbox</b> is: a place to learn what is fair and what is broken while it is still cheap to fix.
+The role asks for a living design document, balance logic, and playtest frameworks rather than finished
+code. That is exactly what this is.</p>
 
-<h2><span class="no">I.</span> The Field</h2>
-<div class="plate">
-  <div class="ph"><span>PLATE I · FIELD SURVEY</span><span>SRTM DEM · z13</span></div>
+<div class="plate map">
+  <div class="ph"><span>Plate I · Field Survey</span><span>Lake San Antonio · SRTM DEM</span></div>
   <img src="../docs/img/forge-map.png">
 </div>
-<p class="cap">Lake San Antonio, Bradley CA — a real Lightning-in-a-Bottle venue. The reservoir &amp; creeks form
-the bridge-gated ravine; control points snap to dry ground; travel-time follows real slope. Chokepoints are
-read off the terrain, not drawn by hand.</p>
+<p class="cap">Plate I. A survey of the real ground. Blue is the reservoir and its creeks, the ravine a bridge
+must span. The red and blue diamonds are the home strongholds. Dashed red lines mark the crossings where a
+bridge may be raised. Contours, scale, and bearing are read straight from the elevation data.</p>
 
-<h2><span class="no">II.</span> Field Notes — what the sandbox found</h2>
-<div class="note">
-  <div class="n">01</div>
-  <div><p class="h">Self-play found an exploit the heuristics didn't</p>
-  <p>A policy trained from a blank genome reaches <span class="attr">~100%</span> against the four hand-written
-  bots — it surfaced a hole a scripted pool would have called "balanced." RL here is a <em>better playtester</em>,
-  not flashy AI. <span class="mono">(CEM, no GPU; gym-microrts/PPO skeleton ships for the scaled build.)</span></p></div>
-</div>
-<div class="note warn">
-  <div class="n">02</div>
-  <div><p class="h">Terrain flips balance</p>
-  <p>The same ruleset that's fine on a symmetric board goes <span class="attr">aggressor-dominant (~75%)</span>
-  on real Lake San Antonio terrain, and the venue runs side-biased. Balance is <em>per-venue</em>, not
-  one-and-done — that's the recurring service.</p></div>
-</div>
-<div class="note">
-  <div class="n">03</div>
-  <div><p class="h">Policies don't fully transfer · turtling is non-viable</p>
-  <p>The board-trained policy slips <span class="attr">~85% → ~70s%</span> on real terrain (a transfer gap),
-  and pure turtling can't cross the ravine. Both surface as design calls, each with the levers to change them.</p></div>
-</div>
+<h2><span class="no">I.</span> The Field</h2>
+<p>Every match is fought on a map, and the one above is real. It is built from a <b>DEM</b> (a digital
+elevation model, which is simply a height map of actual ground) of Lake San Antonio in California, a site
+that has hosted the Lightning in a Bottle festival. The reservoir and its creeks become the <b>ravine</b>,
+a barrier no one can cross on foot. The only way over is a <b>bridge</b>, and bridges must be built and paid
+for. The two diamonds are <b>strongholds</b>, the home keeps each side defends. Travel time follows the real
+slopes, so a climb costs more than a stroll. The point is plain. The terrain itself decides where the
+chokepoints are. Nobody drew them by hand.</p>
 
-<h2><span class="no">III.</span> Evidence</h2>
-<div class="plate ev">
-  <div class="ph"><span>PLATE II · SELF-PLAY LEARNING CURVE</span><span>CEM · 12 gen</span></div>
+<h2><span class="no">II.</span> How a Match Is Won</h2>
+<p>A side wins by holding ground over time. You take a sector by standing on it with more bodies than the
+enemy, which slowly turns it to your colour. You keep it by staying. Leave, and it drifts back to neutral,
+so no one can sit on the whole map at once. Players come in <b>classes</b>, each with a trade: scouts who see
+far, anchors who hold hard, engineers who raise bridges, quartermasters who enrich the land they stand on,
+heralds who broker deals. A match runs ninety minutes in four acts, from the opening land grab to a closing
+siege, paced by a costumed Game Master. The complete rules, with every class and number, live in the
+companion <b>Field Manual</b>.</p>
+
+<h2><span class="no">III.</span> The Tireless Playtester</h2>
+<p>To test all of this without gathering a crowd, the bench plays against itself. <b>Self-play</b> means the
+computer fields simple robot captains, lets a learner compete against them, and keeps whatever wins, round
+after round. The chart below is that learning happening. It begins at zero, a blank mind that plays badly,
+and climbs until it beats every hand-written strategy. The bars beside it show what the winner came to
+value. Read together they tell a story: it taught itself to rush the late-game siege and to stop wasting
+time guarding ground it already held. The lesson for a designer is blunt. A learning opponent will find the
+exploit your scripted bots never could. This is the honest use of such an AI here. It is a tireless
+playtester, not a spectacle.</p>
+<div class="plate">
+  <div class="ph"><span>Plate II · Self-Play Learning Curve</span><span>twelve rounds</span></div>
   <img src="../docs/img/s3-rl-curve.png">
 </div>
-<p class="cap">Blank genome → ~100% win-rate vs the heuristic pool, with the weights it discovered (it taught
-itself to rush the Phase-4 siege tower).</p>
-<div class="plate ev">
-  <div class="ph"><span>PLATE III · BALANCE READOUT (REAL FIELD)</span><span>600 matches · seeded</span></div>
+<p class="cap">Plate II. The learner's win-rate against the four scripted strategies, climbing from nothing
+over twelve rounds of self-play. The right-hand bars are the traits it learned to seek (green) or to avoid
+(red). It reached roughly one hundred percent, meaning it found a hole the scripted bots called fair.</p>
+
+<h2><span class="no">IV.</span> Reading the Balance</h2>
+<p>Once the playtesters are strong, the bench runs the match thousands of times and reads the averages. That
+is <b>Monte Carlo</b>, a grand name for a simple habit: do not trust one game, trust ten thousand. The
+readout below answers the questions that decide whether a game is good. Is the map fair to both sides? Is any
+single strategy strictly best? Does an early lead simply snowball, or can the loser claw back? On this real
+terrain the answers are sharp. The map sits close to even, forty-five against fifty-five. But aggression
+dominates at about three wins in four, far stronger than on flat ground, because the reservoir's chokepoints
+reward a hard, early push. Pure defence is hopeless, since a turtle can never cross the ravine to score.
+None of this is a fault to hide. It is a set of dials to turn, and the tool names which to turn and by how
+much.</p>
+<div class="plate">
+  <div class="ph"><span>Plate III · Balance Readout</span><span>600 matches · real field</span></div>
   <img src="../docs/img/s4-verdict.png">
 </div>
-<p class="cap">Findings, win-rate by strategy, faction fairness, and the matchup matrix — generated on the
-Lake San Antonio field.</p>
+<p class="cap">Plate III. The same ruleset judged over six hundred matches on the Lake San Antonio field.
+The bars are win-rates by strategy and by side. The grid reads who beats whom, green for the row winning,
+red for the row losing. The four small figures below are the texture of a match: how often a lead holds, how
+often the loser recovers, how much time is dead, and how often a siege actually fires.</p>
 
-<h2><span class="no">IV.</span> Instrument</h2>
+<h2><span class="no">V.</span> The Bench Itself</h2>
 <div class="specs">
-  <div><span class="k">Levers</span> 10 dials, each with an honesty ledger (intent / trade-off / failure).</div>
-  <div><span class="k">Playtest</span> Monte Carlo over all matchups: fairness, dominance, snowball, dead-time, siege rate.</div>
-  <div><span class="k">Mechanics</span> presence-by-pulse capture, classes, the 90-min phase arc, walls + battering + delay towers, fog.</div>
-  <div><span class="k">Stack</span> ES-module JS (no build, on Pages) · Python+Pillow for the DEM · seeded (<code>node test/smoke.mjs</code>).</div>
-</div>
-
-<h2><span class="no">V.</span> The kit</h2>
-<div class="specs">
-  <div><span class="k">Field Manual</span> the full rules as a tabletop-style rulebook — classes as stat blocks, the 90-min arc, every lever (attached / in repo).</div>
-  <div><span class="k">Live demo</span> play it, drag the levers, run the playtest — alyasska.github.io/seed-artifact</div>
-  <div><span class="k">Design + balance docs</span> game design, balance report, real-world deployment notes — in <code>docs/</code>.</div>
-  <div><span class="k">Reproducible</span> <code>node test/smoke.mjs</code> · <code>node rl/selfplay.mjs</code> · <code>python tools/fetch_dem.py</code>.</div>
+  <div><span class="k">Levers.</span> Ten dials, each written down with what it buys and what it costs (an honesty ledger).</div>
+  <div><span class="k">Playtest.</span> Thousands of seeded matches, read as averages, never a single lucky game.</div>
+  <div><span class="k">Mechanics.</span> Capture by presence, five classes, the four-act clock, walls and sieges, fog of war.</div>
+  <div><span class="k">Built from.</span> Plain web code that runs anywhere, real elevation data, every result reproducible.</div>
 </div>
 
 <div class="foot">
-<p class="endnote"><b>END VISION —</b> the pre-flight for The Forge: tune economy, class weights, and phase
-timings <b>per venue</b> in sim → ship a near-balanced rulebook → spend the few expensive on-field pilots
-validating how real humans behave, not discovering that turtling is broken with 500 people on a field.</p>
-<p><b>SCOPE</b> · one system, finished small. Classes / intel / parley designed in full, partly wired; bots map the structural envelope, not the feel. &nbsp; <b>LIVE</b> alyasska.github.io/seed-artifact &nbsp; <b>CODE</b> github.com/Alyasska/seed-artifact</p>
+<p class="endnote"><b>The Vision.</b> The Forge will travel from venue to venue, and every field is different.
+This bench is the pre-flight check. Tune the economy, the classes, and the timing for each new ground in
+simulation, ship a rulebook that is already close to fair, and spend the few costly real rehearsals on the
+one thing no computer can judge: whether five hundred living people are having a good time.</p>
+<p><b>The kit.</b> Field Manual (the full rules) · live demo at alyasska.github.io/seed-artifact · design and
+balance notes in the repository at github.com/Alyasska/seed-artifact.</p>
 </div>
 
 </body></html>
