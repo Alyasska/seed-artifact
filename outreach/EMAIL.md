@@ -52,7 +52,5 @@ github.com/Alyasska · alyasska.github.io · lyasskar@gmail.com · +7 707 895 31
 
 ---
 ATTACH:
-- Forge-Balance-Sandbox-1pager.md (or export to PDF)
-- ../docs/img/s4-money-shot.png   (real terrain + the balance readout)
-- ../docs/img/s3-rl-curve.png     (self-play learning curve)
-- ../docs/img/s1-real-terrain.png (the Lake San Antonio field)
+- Forge-Balance-Sandbox.pdf   <- the one to attach (2-page overview w/ visuals)
+  (source: outreach/overview.html · text version: Forge-Balance-Sandbox-1pager.md)
