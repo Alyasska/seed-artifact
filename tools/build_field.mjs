@@ -30,21 +30,27 @@ function slopeAt(cx, cy) {
 
 const COLS = 5, ROWS = 3;
 const idx = (c, r) => c * ROWS + r;
+// require a real margin above the waterline so nodes sit on dry land, not the shore
+const DRY = waterElev + (HI - LO) * 0.07;
 const sectors = [];
 for (let c = 0; c < COLS; c++)
   for (let r = 0; r < ROWS; r++) {
-    // target cell in this grid zone, then snap to the best nearby land cell
+    // target cell in this grid zone, then snap to the lowest-slope DRY-LAND cell;
+    // if the zone is all water/shore, take the driest (highest) cell instead.
     const tx = Math.round(((c + 0.5) / COLS) * (W - 1));
     const ty = Math.round(((r + 0.5) / ROWS) * (H - 1));
-    let best = null, bestScore = 1e9;
-    const win = Math.floor(W / (COLS * 2));
+    const win = Math.round(W / (COLS * 1.5));
+    let best = null, bestSlope = 1e9, driest = null, driestE = -1e9;
     for (let yy = ty - win; yy <= ty + win; yy++)
       for (let xx = tx - win; xx <= tx + win; xx++) {
         if (xx < 1 || yy < 1 || xx >= W - 1 || yy >= H - 1) continue;
-        const score = slopeAt(xx, yy) + (isWaterCell(xx, yy) ? 9999 : 0);
-        if (score < bestScore) { bestScore = score; best = [xx, yy]; }
+        const e = at(xx, yy);
+        if (e > driestE) { driestE = e; driest = [xx, yy]; }
+        if (e < DRY) continue; // skip water + shoreline
+        const sl = slopeAt(xx, yy);
+        if (sl < bestSlope) { bestSlope = sl; best = [xx, yy]; }
       }
-    const [bx, by] = best || [tx, ty];
+    const [bx, by] = best || driest || [tx, ty];
     const isRedHome = c === 0 && r === 1, isBlueHome = c === COLS - 1 && r === 1;
     sectors.push({
       id: idx(c, r), col: c, row: r,

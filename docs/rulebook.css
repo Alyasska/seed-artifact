@@ -1,0 +1,91 @@
+/* The Forge — documentation theme, in the visual language of a tabletop rulebook.
+   Parchment, Roman-caps display headers, a Garamond body, oxblood accents, stat
+   blocks, and tapered rules. Free Google fonts stand in for the proprietary
+   originals (Cinzel ≈ Modesto titles, EB Garamond ≈ Bookmania body). */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root{
+  --ink:#241c14; --parch:#efe5cf; --parch2:#e7d9bd; --box:#fdf3da;
+  --ox:#58180d;        /* oxblood — headers & rules */
+  --red:#922610;       /* brighter rule red */
+  --gold:#b8893b; --gold2:#7a5a2e;
+  --muted:#6a5a44;
+}
+@page{ size:A4; margin:15mm 14mm; }
+*{ box-sizing:border-box; }
+body{
+  margin:0; color:var(--ink);
+  font-family:"EB Garamond", Georgia, "Palatino Linotype", serif;
+  font-size:11pt; line-height:1.42;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #f5ecd8 0%, var(--parch) 45%, var(--parch2) 100%);
+}
+/* faint parchment mottling */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.5; z-index:-1;
+  background:
+    radial-gradient(80px 60px at 18% 22%, #00000008, transparent 60%),
+    radial-gradient(120px 80px at 78% 38%, #00000008, transparent 60%),
+    radial-gradient(90px 70px at 40% 80%, #00000008, transparent 60%);
+}
+
+h1{ font-family:"Cinzel Decorative", serif; font-weight:900; color:var(--ox);
+  text-align:center; font-size:30pt; line-height:1.05; margin:0 0 2px; letter-spacing:.5px; }
+.subtitle{ text-align:center; font-style:italic; color:var(--gold2); font-size:12.5pt; margin:0 0 2px; }
+.byline{ text-align:center; color:var(--muted); font-size:9.5pt; margin:0 0 10px; }
+.byline a{ color:var(--ox); text-decoration:none; }
+
+h2{ font-family:"Cinzel", serif; font-weight:700; color:var(--ox);
+  font-size:15pt; margin:16px 0 4px; padding-bottom:3px;
+  border-bottom:2.5px solid var(--red); border-image:linear-gradient(to right,var(--red) 55%,transparent) 1; }
+h3{ font-family:"Cinzel", serif; font-weight:600; color:var(--ox); font-size:11.5pt; margin:10px 0 3px; }
+p{ margin:5px 0; }
+em{ font-style:italic; }
+b,strong{ color:#1c150d; }
+a{ color:var(--ox); }
+code{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.9em; background:#0000000d; padding:0 3px; border-radius:3px; }
+.lead{ font-size:11.5pt; }
+.muted{ color:var(--muted); }
+
+/* drop cap on the first paragraph of a .first block */
+.first > p:first-of-type::first-letter{
+  font-family:"Cinzel Decorative", serif; font-weight:900; color:var(--ox);
+  float:left; font-size:3.5em; line-height:.78; padding:6px 8px 0 0; }
+
+/* the iconic cream stat block */
+.statblock{ background:var(--box); border:1px solid var(--gold);
+  box-shadow:0 0 0 2px var(--box), 0 1px 3px #0003; border-radius:2px;
+  padding:7px 11px 9px; margin:8px 0; break-inside:avoid; }
+.statblock h3{ margin:0 0 2px; font-variant:small-caps; letter-spacing:.4px; }
+.statblock .tagline{ font-style:italic; color:var(--gold2); font-size:9.5pt; margin:0 0 4px; }
+.statblock .bar{ height:0; border-top:3px solid var(--red); margin:5px 0; }
+.attr{ color:var(--ox); font-weight:600; }
+.statblock p{ margin:3px 0; font-size:10.5pt; }
+
+/* descriptive sidebar (rules note) */
+.sidebar{ background:#e9dcbe; border-left:4px solid var(--ox);
+  padding:7px 11px; margin:9px 0; break-inside:avoid; font-size:10.5pt; }
+.sidebar h3{ margin:0 0 3px; }
+
+.tag{ display:inline-block; font-family:"Cinzel",serif; font-size:8pt; letter-spacing:.5px;
+  color:#fff; background:var(--ox); padding:0 6px; border-radius:2px; margin-right:5px; vertical-align:1px; }
+.tag.t{ background:var(--gold2); } .tag.f{ background:#6e2c24; }
+
+table{ border-collapse:collapse; width:100%; margin:6px 0; font-size:10pt; }
+th{ font-family:"Cinzel",serif; font-weight:600; color:var(--ox); text-align:left;
+  border-bottom:2px solid var(--red); padding:3px 6px; }
+td{ padding:3px 6px; border-bottom:1px solid #00000018; }
+tbody tr:nth-child(odd){ background:#00000008; }
+
+ul{ margin:5px 0; padding-left:18px; } li{ margin:4px 0; }
+
+.fig{ border:1px solid var(--gold2); border-radius:2px; overflow:hidden; margin:9px 0 3px;
+  box-shadow:0 1px 3px #0003; break-inside:avoid; }
+.fig img{ width:100%; display:block; }
+.cap{ font-style:italic; color:var(--muted); font-size:9pt; margin:2px 0 10px; text-align:center; }
+
+.cols{ column-count:2; column-gap:16px; }
+.cols h2{ column-span:all; }
+.flourish{ text-align:center; color:var(--gold); font-size:13pt; margin:10px 0; }
+.foot{ border-top:2px solid var(--red); margin-top:14px; padding-top:7px; color:var(--muted); font-size:9pt; }
+.foot b{ color:var(--ink); }

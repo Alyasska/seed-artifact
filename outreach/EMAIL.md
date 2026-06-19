@@ -26,7 +26,7 @@ A few things it already turned up, fwiw:
 - dropped the real Lake San Antonio DEM in (it's a LIB site — figured that's
   terrain Forge could actually run on). the reservoir splits the map into
   bridge-gated halves, and the same ruleset that's fine on a symmetric board goes
-  aggressor-dominant (~80%) on that terrain. so balance isn't one-and-done —
+  aggressor-dominant (~75%) on that terrain. so balance isn't one-and-done —
   every venue wants its own pass. that's the recurring thing this does.
 
 - pure turtling is non-viable (can't cross the ravine), siege fires but rarely

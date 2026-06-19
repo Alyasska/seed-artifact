@@ -21,21 +21,21 @@ The exact same ruleset:
 
 | | symmetric board | real Lake San Antonio |
 |---|---|---|
-| faction win% (map fairness) | 49 / 51 ✓ | **57 / 43** ⚠ side bias |
-| aggressor win% | 56 | **~80** ⚠ dominant |
-| rl win% | 85 | 60 |
-| turtle win% | 9 | 10 |
-| siege fires | 75% | 63% |
+| faction win% (map fairness) | 49 / 51 ✓ | **45 / 55** ⚠ side bias |
+| aggressor win% | 56 | **~76** ⚠ dominant |
+| rl win% | 85 | 74 |
+| turtle win% | 9 | 11 |
+| siege fires | 75% | 62% |
 
 The reservoir cuts the real map into bridge-gated halves, and those chokepoints
-make the **aggressive rush dominant (~80%)** where it was only mild (56%) on open
+make the **aggressive rush dominant (~76%)** where it was only mild (56%) on open
 ground. **You cannot balance The Forge once and ship it to every venue — each
 field needs its own pass.** That's the recurring service the tool provides.
 
-**3. The RL policy doesn't transfer between maps (and that's the lesson).**
-Trained on the symmetric board, `rl` drops from 85% → 60% on real terrain. A
-policy (or a balance) tuned on one layout is not valid on the next — you retrain /
-re-tune per venue. Cheap to discover in sim; expensive to discover on a field.
+**3. The RL policy doesn't fully transfer between maps (and that's the lesson).**
+Trained on the symmetric board, `rl` slips from ~85% → ~74% on real terrain — a
+real transfer gap. A policy (or a balance) tuned on one layout isn't fully valid
+on the next; you retrain / re-tune per venue. Cheap to find in sim; expensive on a field.
 
 **4. Pure turtling is non-viable (~10%) on both maps** — it can't cross the
 ravine without bridging. A real design decision, not a bug: give defense a path,

@@ -32,7 +32,7 @@ balance logic + playtest frameworks* — is exactly this.
    scratch beats all four hand-written bots (~85% on the test board). RL here is a
    *better playtester*, not a gimmick.
 2. **Terrain flips balance.** The same ruleset that's fine on a symmetric board
-   goes aggressor-dominant (~80%) on real Lake San Antonio terrain. Balance is
+   goes aggressor-dominant (~75%) on real Lake San Antonio terrain. Balance is
    per-venue, not one-and-done — that's the recurring service.
 3. **Pure turtling is non-viable**, siege fires but rarely decides — surfaced as
    design calls, with the levers to change them.

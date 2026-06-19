@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<title>The Forge — Field Manual</title>
+<link rel="stylesheet" href="rulebook.css">
+</head><body>
+
+<h1>The Forge</h1>
+<p class="subtitle">Field Manual — game systems &amp; rules · v0.2</p>
+<p class="byline">A festival-scale, real-world strategy game · design sample for SEED ·
+Aliaskar Bekishev · alyasska.github.io · github.com/Alyasska/seed-artifact</p>
+
+<div class="first">
+<p class="lead">Hundreds of players, two-to-four factions, one outdoor field, a single
+<b>90-minute session</b>. Capture-the-Flag crossed with a real-time strategy game, run by a
+costumed Game Master with NFC totems, an app, and LED towers for an interface. You take ground by
+standing on it and tapping it — <b>there are no eliminations</b>. Every attendee plays the full
+ninety minutes. This manual is the ruleset the balance sandbox tunes; the numbers below are its
+defaults (control resolves per 10-second tick; the economy ticks once a minute).</p>
+</div>
+
+<div class="cols">
+
+<h2>The Field</h2>
+<p>The field is a graph of <b>sectors</b>, each a physical control point (an NFC totem). Natural
+features — a creek, a ridge, the reservoir — split it into <b>bridge-gated</b> halves: those
+crossings are impassable until an Engineer builds a bridge. On a real venue (Lake San Antonio, a
+Lightning-in-a-Bottle site) the sectors snap to dry ground and the water becomes the ravine.</p>
+
+<h2>Control &amp; Capture</h2>
+<p>Each sector carries a <b>control meter</b> from −100 (one faction) to +100 (the other). Standing
+on a sector adds <span class="attr">presence</span>; net presence drives the meter, capped so a
+single deathball can't steamroll. The meter flips ownership at <b>±60</b> (hysteresis), and uncontested
+ground slowly drifts back to neutral — you cannot hold the whole map passively.</p>
+<div class="sidebar">
+<h3>Rule · Presence by Pulse</h3>
+<p>Presence = <em>distinct</em> bodies tapped in the last 60 s (re-tap to hold). Net pressure =
+(attackers − defenders) × class weight × <b>capRate 6</b>, capped at <b>±5</b>. A ~3-net edge takes a
+neutral sector in about a minute. Holding is an active job — patrol, don't camp.</p>
+</div>
+
+<h2>Player Classes</h2>
+<p>A faction's composition is a deck-building choice — too many Anchors can't take ground; too many
+Runners can't hold it. Presence weight is read on attack / on defense.</p>
+
+<div class="statblock"><h3>Runner</h3><p class="tagline">scout · intel</p><div class="bar"></div>
+<p><span class="attr">Presence</span> 0.5 atk / 0.5 def · <span class="attr">Move</span> fast (×1.6)</p>
+<p>Reveals fog for HQ; carries intel chits at double speed; can plant a feint.</p></div>
+
+<div class="statblock"><h3>Anchor</h3><p class="tagline">hold ground</p><div class="bar"></div>
+<p><span class="attr">Presence</span> 1.0 atk / <b>2.0 def</b> · <span class="attr">Move</span> slow (×0.6)</p>
+<p>Dig In: +50% defensive control on the held sector. The wall a faction is built around.</p></div>
+
+<div class="statblock"><h3>Engineer</h3><p class="tagline">bridges</p><div class="bar"></div>
+<p><span class="attr">Presence</span> 1.0 / 1.0 · <span class="attr">Move</span> normal</p>
+<p>Builds a bridge at a gate (kit + 120 Supply); can sabotage one enemy bridge for 3 min.</p></div>
+
+<div class="statblock"><h3>Quartermaster</h3><p class="tagline">+50% yield</p><div class="bar"></div>
+<p><span class="attr">Presence</span> 1.0 / 1.0 · <span class="attr">Move</span> normal</p>
+<p>+50% Supply on the sector they occupy; carries double supply tokens.</p></div>
+
+<div class="statblock"><h3>Herald</h3><p class="tagline">rally · parley</p><div class="bar"></div>
+<p><span class="attr">Presence</span> 1.0 / 1.0 · <span class="attr">Move</span> normal</p>
+<p>Opens a parley channel between HQs; Rally grants allies +1 presence here for 60 s.</p></div>
+
+<h2>The Economy</h2>
+<p>Held sectors pay <b>Supply</b> into one faction pool. A per-sector yield cap means stacking is
+wasted — spread out. The trailing faction captures harder (rubber-band), the brake on snowball.</p>
+<table>
+<tr><th>Source / Sink</th><th>Value</th></tr>
+<tr><td>Sector held</td><td>+10 Supply / min</td></tr>
+<tr><td>Stronghold held</td><td>+30 / min (×3)</td></tr>
+<tr><td>Quartermaster present</td><td>+50% that sector</td></tr>
+<tr><td>Build a bridge</td><td>120 Supply</td></tr>
+<tr><td>Recon report / Comms jam</td><td>20 / 80</td></tr>
+<tr><td>Battering a Wall</td><td>10 Supply → −1 Wall</td></tr>
+</table>
+
+<h2>Bridges · Intel · Siege</h2>
+<p><b>Bridges</b> open a gate over the ravine and are <em>shared</em> — your attack route is also your
+exposure. <b>Intel</b> is a resource: the HQ map is fogged, Runners scout, recon reports and comms-jams
+buy or deny information; a faction can win blind by out-scouting. <b>Siege</b> is the endgame: a
+stronghold's <b>Wall (100)</b> is invulnerable until the Siege phase, then falls only to bodies + a
+Supply dump (battering) after the attacker holds the <b>delay tower</b> for 3 continuous minutes.</p>
+
+<h2>The 90-Minute Arc</h2>
+<table>
+<tr><th>Time</th><th>Phase</th><th>Unlocks</th></tr>
+<tr><td>0–15</td><td>Muster &amp; landgrab</td><td>strongholds safe; grab neutrals</td></tr>
+<tr><td>15–45</td><td>Contact</td><td>bridges buildable; intel war</td></tr>
+<tr><td>45–70</td><td>Escalation</td><td>comms-jam + parley; leader ganked</td></tr>
+<tr><td>70–90</td><td>Siege</td><td>bell rings; Walls batterable; delay towers</td></tr>
+</table>
+<p>The GM paces the phases and injects events (a supply drop, a storm that closes a region), sells
+intel, and adjudicates parley — the live balance valve the sandbox tells you where to set.</p>
+
+<h2>Balance Levers — the Honesty Ledger</h2>
+<p>Ten dials tune the game. Each states what it buys and what it costs.</p>
+<div class="sidebar"><h3>Capture rate</h3><p><span class="tag">intent</span>make taking a sector a ~minute push.
+<span class="tag t">trade</span>fast churns the map, slow lets first-movers lock it.
+<span class="tag f">fails</span>too fast → flicker; too slow → stalemate.</p></div>
+<div class="sidebar"><h3>Comeback aid</h3><p><span class="tag">intent</span>keep the last 30 minutes alive for the trailing side.
+<span class="tag t">trade</span>fights snowball but softens the reward for early play.
+<span class="tag f">fails</span>too high → the lead is meaningless.</p></div>
+<div class="sidebar"><h3>Battering rate</h3><p><span class="tag">intent</span>make the siege endgame reachable — bodies <em>and</em> Supply.
+<span class="tag t">trade</span>fast is decisive, slow makes sieges rare.
+<span class="tag f">fails</span>too slow → sieges never finish.</p></div>
+
+<h2>What the Sandbox Found</h2>
+<ul>
+<li><b>Self-play found an exploit</b> the four heuristics didn't (~100% vs the pool) — a better playtester.</li>
+<li><b>Terrain flips balance:</b> the same ruleset goes aggressor-dominant (~75%) on real Lake San Antonio. Balance is per-venue.</li>
+<li><b>Pure turtling is non-viable</b> (it can't cross the ravine) — a design call, with the levers to change it.</li>
+</ul>
+
+</div>
+
+<div class="foot">
+<p><b>End vision.</b> The pre-flight for The Forge: tune economy, class weights, and phase timings per venue
+in sim → ship a near-balanced rulebook → spend the few expensive on-field pilots validating how real
+humans behave. <b>Live demo:</b> alyasska.github.io/seed-artifact · <b>Code &amp; full docs:</b>
+github.com/Alyasska/seed-artifact</p>
+</div>
+
+</body></html>

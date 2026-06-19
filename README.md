@@ -16,6 +16,13 @@ playtest**.
 [`docs/BALANCE-REPORT.md`](docs/BALANCE-REPORT.md) (what the sim found) ·
 [`docs/REAL-WORLD.md`](docs/REAL-WORLD.md) (how it runs on a real field).
 
+**Styled docs (tabletop-rulebook theme):** the docs also render as D&D-rulebook PDFs via
+[`docs/rulebook.css`](docs/rulebook.css) — the showpiece is
+[`docs/The-Forge-Field-Manual.pdf`](docs/The-Forge-Field-Manual.pdf) (classes as stat blocks, the
+90-min arc as a table, levers as rules sidebars); the one-page attachment is
+[`outreach/Forge-Balance-Sandbox.pdf`](outreach/Forge-Balance-Sandbox.pdf); every other doc is in
+[`docs/pdf/`](docs/pdf/). Regenerate with `node tools/md2rulebook.mjs` + Chrome's print-to-pdf.
+
 ## Run
 
 ```bash
