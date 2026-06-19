@@ -1,68 +1,95 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
-<title>The Forge — Balance Sandbox</title>
-<link rel="stylesheet" href="../docs/rulebook.css">
+<title>The Forge — Field Dossier</title>
+<link rel="stylesheet" href="dossier.css">
 </head><body>
 
-<h1>The Forge</h1>
-<p class="subtitle">Balance Sandbox — a proactive design sample for SEED</p>
-<p class="byline">Game Systems &amp; Mechanics Designer · Aliaskar Bekishev ·
-alyasska.github.io · github.com/Alyasska/seed-artifact · lyasskar@gmail.com</p>
+<div class="cartouche">
+  <div>
+    <div class="t1">THE FORGE</div>
+    <div class="t2">FIELD DOSSIER · BALANCE SANDBOX</div>
+  </div>
+  <div class="stamp">DESIGN SAMPLE · SEED</div>
+  <div class="meta">
+    Game Systems &amp; Mechanics Designer<br>
+    Aliaskar Bekishev<br>
+    alyasska.github.io · github.com/Alyasska/seed-artifact<br>
+    lyasskar@gmail.com
+  </div>
+</div>
 
-<div class="first">
-<p class="lead">An <b>in-silico playtest</b> for one Forge system — territory control, the bridge
+<p class="lead"><span class="drop">A</span>n <b>in-silico playtest</b> for one system of The Forge — territory, the bridge
 momentum layer, player classes, and a siege endgame. You can't cheaply playtest a 500-person,
 90-minute field game, so this models one system and runs thousands of matches headless to read the
-balance <em>before</em> anyone books a venue. The same rules engine drives the watchable live match
-<b>and</b> the headless sims — a designer/GM pre-flight rig, not a demo game. It is the deliverable
-the role names: a <b>living design document, balance logic, and playtest frameworks</b> — not just code.</p>
+balance <em>before</em> anyone books a venue. One rules engine drives the live match <b>and</b> the sims —
+a designer/GM pre-flight rig. It is the deliverable the role names: a <b>living design document, balance
+logic, and playtest frameworks</b>, not just code.</p>
+
+<h2><span class="no">I.</span> The Field</h2>
+<div class="plate">
+  <div class="ph"><span>PLATE I · FIELD SURVEY</span><span>SRTM DEM · z13</span></div>
+  <img src="../docs/img/forge-map.png">
+</div>
+<p class="cap">Lake San Antonio, Bradley CA — a real Lightning-in-a-Bottle venue. The reservoir &amp; creeks form
+the bridge-gated ravine; control points snap to dry ground; travel-time follows real slope. Chokepoints are
+read off the terrain, not drawn by hand.</p>
+
+<h2><span class="no">II.</span> Field Notes — what the sandbox found</h2>
+<div class="note">
+  <div class="n">01</div>
+  <div><p class="h">Self-play found an exploit the heuristics didn't</p>
+  <p>A policy trained from a blank genome reaches <span class="attr">~100%</span> against the four hand-written
+  bots — it surfaced a hole a scripted pool would have called "balanced." RL here is a <em>better playtester</em>,
+  not flashy AI. <span class="mono">(CEM, no GPU; gym-microrts/PPO skeleton ships for the scaled build.)</span></p></div>
+</div>
+<div class="note warn">
+  <div class="n">02</div>
+  <div><p class="h">Terrain flips balance</p>
+  <p>The same ruleset that's fine on a symmetric board goes <span class="attr">aggressor-dominant (~75%)</span>
+  on real Lake San Antonio terrain, and the venue runs side-biased. Balance is <em>per-venue</em>, not
+  one-and-done — that's the recurring service.</p></div>
+</div>
+<div class="note">
+  <div class="n">03</div>
+  <div><p class="h">Policies don't fully transfer · turtling is non-viable</p>
+  <p>The board-trained policy slips <span class="attr">~85% → ~70s%</span> on real terrain (a transfer gap),
+  and pure turtling can't cross the ravine. Both surface as design calls, each with the levers to change them.</p></div>
 </div>
 
-<div class="fig"><img src="../docs/img/s1-real-terrain.png"></div>
-<p class="cap">Live match on a real DEM of Lake San Antonio (a Lightning-in-a-Bottle site). The reservoir &amp; creeks
-become the bridge-gated ravine; travel-time follows real slope. Gold spans are built bridges, dashed lines unbuilt
-crossings, diamonds are strongholds (with Wall arcs), dots are class-typed squads.</p>
+<h2><span class="no">III.</span> Evidence</h2>
+<div class="plate ev">
+  <div class="ph"><span>PLATE II · SELF-PLAY LEARNING CURVE</span><span>CEM · 12 gen</span></div>
+  <img src="../docs/img/s3-rl-curve.png">
+</div>
+<p class="cap">Blank genome → ~100% win-rate vs the heuristic pool, with the weights it discovered (it taught
+itself to rush the Phase-4 siege tower).</p>
+<div class="plate ev">
+  <div class="ph"><span>PLATE III · BALANCE READOUT (REAL FIELD)</span><span>600 matches · seeded</span></div>
+  <img src="../docs/img/s4-verdict.png">
+</div>
+<p class="cap">Findings, win-rate by strategy, faction fairness, and the matchup matrix — generated on the
+Lake San Antonio field.</p>
 
-<h2>What it found</h2>
-<div class="statblock">
-<h3>I. Self-play found an exploit the heuristics didn't</h3>
-<p>A policy trained from a blank genome reaches <span class="attr">~100%</span> against the four hand-written
-bots — it surfaced a hole a scripted pool would have called "balanced." RL here is a <em>better playtester</em>,
-not flashy AI. (Cross-Entropy Method, no GPU; a gym-microrts/PPO skeleton ships for the scaled version.)</p>
-</div>
-<div class="statblock">
-<h3>II. Terrain flips balance</h3>
-<p>The same ruleset that's fine on a symmetric board goes <span class="attr">aggressor-dominant (~75%)</span> on
-real Lake San Antonio terrain, and the venue runs side-biased. Balance is <em>per-venue</em>, not one-and-done —
-that's the recurring service.</p>
-</div>
-<div class="statblock">
-<h3>III. Policies don't fully transfer · pure turtling is non-viable</h3>
-<p>The board-trained policy slips <span class="attr">~85% → ~70s%</span> on real terrain (a transfer gap), and
-turtling can't cross the ravine. Both surface as design calls, each with the levers to change them.</p>
+<h2><span class="no">IV.</span> Instrument</h2>
+<div class="specs">
+  <div><span class="k">Levers</span> 10 dials, each with an honesty ledger (intent / trade-off / failure).</div>
+  <div><span class="k">Playtest</span> Monte Carlo over all matchups: fairness, dominance, snowball, dead-time, siege rate.</div>
+  <div><span class="k">Mechanics</span> presence-by-pulse capture, classes, the 90-min phase arc, walls + battering + delay towers, fog.</div>
+  <div><span class="k">Stack</span> ES-module JS (no build, on Pages) · Python+Pillow for the DEM · seeded (<code>node test/smoke.mjs</code>).</div>
 </div>
 
-<div class="fig"><img src="../docs/img/s3-rl-curve.png"></div>
-<p class="cap">Self-play learning curve: blank genome → ~100% win-rate vs the heuristic pool over 12 generations, with
-the weights it discovered (it taught itself to rush the Phase-4 siege tower).</p>
-
-<h2>How it works</h2>
-<p><span class="tag">levers</span>10 balance dials, each with an <b>honesty ledger</b> — intent / trade-off / failure mode.</p>
-<p><span class="tag">playtest</span>Monte Carlo over all strategy matchups: faction fairness, dominant-strategy
-detection, snowball vs comeback, dead-time, siege rate, matchup matrix.</p>
-<p><span class="tag">mechanics</span>Presence-by-pulse capture (NFC-tap-shaped events), classes, the 90-minute
-phase arc, walls + battering + delay towers, fog-of-war intel.</p>
-<p><span class="tag">stack</span>Plain ES-module JS (no build, runs on Pages) · Python+Pillow for the DEM pull ·
-seeded &amp; reproducible (<code>node test/smoke.mjs</code>).</p>
-
-<div class="fig"><img src="../docs/img/s4-verdict.png"></div>
-<p class="cap">The balance readout on the real field — findings, win-rate by strategy, and the matchup matrix.</p>
+<h2><span class="no">V.</span> The kit</h2>
+<div class="specs">
+  <div><span class="k">Field Manual</span> the full rules as a tabletop-style rulebook — classes as stat blocks, the 90-min arc, every lever (attached / in repo).</div>
+  <div><span class="k">Live demo</span> play it, drag the levers, run the playtest — alyasska.github.io/seed-artifact</div>
+  <div><span class="k">Design + balance docs</span> game design, balance report, real-world deployment notes — in <code>docs/</code>.</div>
+  <div><span class="k">Reproducible</span> <code>node test/smoke.mjs</code> · <code>node rl/selfplay.mjs</code> · <code>python tools/fetch_dem.py</code>.</div>
+</div>
 
 <div class="foot">
-<p><b>End vision.</b> The pre-flight for The Forge: tune economy, class weights, and phase timings <b>per venue</b>
-in sim → ship a near-balanced rulebook → spend the few expensive on-field pilots validating how real humans behave,
-not discovering that turtling is broken with 500 people on a field.</p>
-<p><b>Scope, honestly:</b> one system, finished small. Classes / intel / parley are designed in full but only partly
-wired; bots map the structural balance envelope, not the feel.</p>
+<p class="endnote"><b>END VISION —</b> the pre-flight for The Forge: tune economy, class weights, and phase
+timings <b>per venue</b> in sim → ship a near-balanced rulebook → spend the few expensive on-field pilots
+validating how real humans behave, not discovering that turtling is broken with 500 people on a field.</p>
+<p><b>SCOPE</b> · one system, finished small. Classes / intel / parley designed in full, partly wired; bots map the structural envelope, not the feel. &nbsp; <b>LIVE</b> alyasska.github.io/seed-artifact &nbsp; <b>CODE</b> github.com/Alyasska/seed-artifact</p>
 </div>
 
 </body></html>

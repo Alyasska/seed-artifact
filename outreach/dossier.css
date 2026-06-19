@@ -1,0 +1,68 @@
+/* The Forge — Field Dossier theme. A topographic-survey / expedition-report look:
+   condensed technical display (Oswald), a readable serif body (Spectral), mono for
+   coordinates and metadata (IBM Plex Mono); survey paper, ink, field-green + a
+   survey-red stamp accent. */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --paper:#efe9da; --paper2:#e6dec9; --ink:#20251f; --ink2:#3a3e34;
+  --green:#4a5d3a; --red:#9a2b1a; --water:#2e6090; --line:#20251f; --muted:#6a6452;
+}
+@page{ size:A4; margin:11mm 11mm; }
+*{ box-sizing:border-box; }
+body{
+  margin:0; color:var(--ink); background:var(--paper);
+  font-family:"Spectral", Georgia, serif; font-size:10.4pt; line-height:1.44;
+}
+/* faint survey graticule behind everything */
+body::before{ content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
+  background-image:linear-gradient(#20251f0a 1px,transparent 1px),linear-gradient(90deg,#20251f0a 1px,transparent 1px);
+  background-size:26px 26px; }
+
+.mono{ font-family:"IBM Plex Mono", monospace; }
+b,strong{ color:#10130e; font-weight:600; }
+em{ font-style:italic; }
+a{ color:var(--red); text-decoration:none; }
+code{ font-family:"IBM Plex Mono",monospace; font-size:.88em; background:#20251f0d; padding:0 3px; }
+
+/* header cartouche */
+.cartouche{ border:2px solid var(--ink); display:flex; justify-content:space-between; align-items:center; gap:14px;
+  padding:10px 14px; margin-bottom:12px; position:relative; background:#f4efe2; }
+.cartouche .t1{ font-family:"Oswald",sans-serif; font-weight:700; font-size:30pt; line-height:.9; letter-spacing:1.5px; }
+.cartouche .t2{ font-family:"Oswald",sans-serif; font-weight:500; font-size:11pt; letter-spacing:3px; color:var(--green); margin-top:3px; }
+.cartouche .meta{ text-align:right; font-family:"IBM Plex Mono",monospace; font-size:8pt; color:var(--ink2); line-height:1.7; }
+.stamp{ align-self:center; border:1.5px solid var(--red); color:var(--red); white-space:nowrap;
+  font-family:"Oswald",sans-serif; font-weight:600; font-size:8.5pt; letter-spacing:2px; padding:4px 9px; transform:rotate(-3deg); opacity:.9; }
+
+.lead{ font-size:10.6pt; margin:0 0 10px; }
+.lead .drop{ font-family:"Oswald",sans-serif; font-weight:700; font-size:2.6em; line-height:.7; float:left; color:var(--red); padding:6px 8px 0 0; }
+
+/* section headers: numbered, condensed, ruled */
+h2{ font-family:"Oswald",sans-serif; font-weight:600; font-size:13pt; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--ink); margin:16px 0 7px; padding-bottom:4px; border-bottom:2px solid var(--ink);
+  display:flex; align-items:baseline; gap:10px; }
+h2 .no{ color:var(--red); font-weight:700; }
+
+/* plates (framed figures, like survey inserts) */
+.plate{ border:1.5px solid var(--ink); margin:8px 0 4px; background:#0d1013; break-inside:avoid; }
+.plate .ph{ background:var(--ink); color:var(--paper); font-family:"Oswald",sans-serif; font-weight:500;
+  font-size:8.5pt; letter-spacing:1.5px; text-transform:uppercase; padding:4px 9px; display:flex; justify-content:space-between; }
+.plate img{ width:100%; display:block; }
+.plate.ev img{ max-height:392px; object-fit:contain; background:#0d1013; }
+.cap{ font-family:"IBM Plex Mono",monospace; font-size:8pt; color:var(--muted); margin:3px 2px 12px; }
+
+/* field notes (findings) */
+.note{ display:flex; gap:12px; border-left:3px solid var(--green); padding:6px 0 6px 11px; margin:8px 0; break-inside:avoid; }
+.note.warn{ border-left-color:var(--red); }
+.note .n{ font-family:"Oswald",sans-serif; font-weight:700; font-size:20pt; color:var(--red); line-height:.9; min-width:34px; }
+.note .h{ font-family:"Oswald",sans-serif; font-weight:600; letter-spacing:.5px; text-transform:uppercase; font-size:10pt; margin:0 0 2px; }
+.note p{ margin:0; font-size:10pt; }
+.attr{ font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--red); }
+
+.specs{ display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; margin:6px 0; }
+.specs div{ font-size:10pt; } .specs .k{ font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; font-size:8.5pt; letter-spacing:1px; color:var(--green); }
+
+.foot{ border-top:2px solid var(--ink); margin-top:14px; padding-top:7px;
+  font-family:"IBM Plex Mono",monospace; font-size:8.5pt; color:var(--ink2); }
+.foot b{ color:var(--ink); } .foot a{ color:var(--red); }
+.endnote{ font-size:10pt; margin:6px 0; }

@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>Forge — field survey map</title>
+<style>html,body{margin:0;background:#cdbb94;}canvas{display:block;}</style></head><body>
+<canvas id="m" width="1500" height="1040"></canvas>
+<script type="module">
+const field = await (await fetch("../data/field.json")).json();
+const hm = field.heightmap, { w:HW, h:HH, min:LO, max:HI, waterPct } = hm, E = hm.elev;
+const bbox = field.meta.bbox, span = field.meta.span_m;
+const cv = document.getElementById("m"), g = cv.getContext("2d"), CW = cv.width, CH = cv.height;
+const M = 56, mapX = M, mapY = M, mapW = CW - 2*M, mapH = CH - 150;            // bottom strip for legend/scale
+const at = (x,y)=>E[Math.max(0,Math.min(HH-1,y))*HW+Math.max(0,Math.min(HW-1,x))];
+const norm = e=>(e-LO)/(HI-LO);
+const px = nx => mapX + nx*mapW, py = ny => mapY + ny*mapH;             // 0..1 normalized → canvas
+const cellX = cx => mapX + (cx/(HW-1))*mapW, cellY = cy => mapY + (cy/(HH-1))*mapH;
+
+// ---- hypsometric basemap + hillshade + contours ----
+const img = g.createImageData(CW, CH), D = img.data;
+const ramp = [[0.00,[150,168,118]],[0.30,[183,184,132]],[0.55,[201,178,120]],[0.78,[193,160,108]],[1,[226,214,180]]];
+function tint(t){ for(let i=1;i<ramp.length;i++){ if(t<=ramp[i][0]){ const a=ramp[i-1],b=ramp[i]; const f=(t-a[0])/(b[0]-a[0]); return [0,1,2].map(k=>a[1][k]+(b[1][k]-a[1][k])*f); } } return ramp[ramp.length-1][1]; }
+const levels = []; for(let k=1;k<14;k++) levels.push(LO + k*(HI-LO)/14);
+const step = (HI-LO)/14;
+for(let Y=0;Y<CH;Y++) for(let X=0;X<CW;X++){
+  const p=(Y*CW+X)*4;
+  if(X<mapX||X>mapX+mapW||Y<mapY||Y>mapY+mapH){ D[p]=205;D[p+1]=187;D[p+2]=148;D[p+3]=255; continue; } // margin parchment
+  const cx=Math.round((X-mapX)/mapW*(HW-1)), cy=Math.round((Y-mapY)/mapH*(HH-1));
+  const e=at(cx,cy), n=norm(e);
+  if(n<=waterPct){ const d=0.6+0.4*(n/waterPct); D[p]=46*d+10;D[p+1]=96*d+20;D[p+2]=140*d+30;D[p+3]=255; continue; }
+  const gx=at(cx+1,cy)-at(cx-1,cy), gy=at(cx,cy+1)-at(cx,cy-1);
+  let sh=0.72-(gx-gy)*0.055; sh=Math.max(0.45,Math.min(1.15,sh));
+  let c=tint(n).map(v=>v*sh);
+  // contour line if elevation near a level
+  let dmin=1e9; for(const L of levels) dmin=Math.min(dmin,Math.abs(e-L));
+  if(dmin<step*0.05){ c=c.map(v=>v*0.72); }
+  D[p]=c[0];D[p+1]=c[1];D[p+2]=c[2];D[p+3]=255;
+}
+g.putImageData(img,0,0);
+
+// ---- graticule (lat/lon grid + ticks) ----
+g.strokeStyle="#5a4a2e55"; g.fillStyle="#3c3320"; g.lineWidth=0.8; g.font="11px ui-monospace,monospace";
+const DIV=4;
+for(let i=0;i<=DIV;i++){
+  const fx=i/DIV, x=mapX+fx*mapW, lon=bbox.w+(bbox.e-bbox.w)*fx;
+  g.beginPath(); g.moveTo(x,mapY); g.lineTo(x,mapY+mapH); g.stroke();
+  g.textAlign="center"; g.fillText(lon.toFixed(3)+"°", x, mapY-6); g.fillText(lon.toFixed(3)+"°", x, mapY+mapH+16);
+  const fy=i/DIV, y=mapY+fy*mapH, lat=bbox.n+(bbox.s-bbox.n)*fy;
+  g.beginPath(); g.moveTo(mapX,y); g.lineTo(mapX+mapW,y); g.stroke();
+  g.textAlign="right"; g.save(); g.translate(mapX-8,y); g.fillText(lat.toFixed(3)+"°",0,4); g.restore();
+}
+g.strokeStyle="#2c2414"; g.lineWidth=2; g.strokeRect(mapX,mapY,mapW,mapH);
+
+// ---- graph overlay (the strategic layout) ----
+const sp = s => ({x:px(s.nx),y:py(s.ny)});
+const sectors=field.sectors, edges=field.edges;
+const isGated=new Set(field.gatedEdges);
+for(const e of edges){ const a=sp(sectors[e.a]), b=sp(sectors[e.b]);
+  g.beginPath(); g.moveTo(a.x,a.y); g.lineTo(b.x,b.y);
+  if(isGated.has(e.id)){ g.strokeStyle="#9a2b1a"; g.lineWidth=2.4; g.setLineDash([7,6]); }
+  else { g.strokeStyle="#2c2414cc"; g.lineWidth=2; g.setLineDash([]); }
+  g.stroke();
+}
+g.setLineDash([]);
+for(const s of sectors){ const p=sp(s);
+  if(s.isStronghold){ const col=s.home==="red"?"#b8341f":"#1f5fb8";
+    g.fillStyle=col; g.strokeStyle="#1a1206"; g.lineWidth=2.5;
+    // keep/star symbol (diamond)
+    g.beginPath(); g.moveTo(p.x,p.y-13);g.lineTo(p.x+13,p.y);g.lineTo(p.x,p.y+13);g.lineTo(p.x-13,p.y);g.closePath(); g.fill(); g.stroke();
+    g.fillStyle="#1a1206"; g.font="bold 12px ui-sans-serif,sans-serif"; g.textAlign="center";
+    g.fillText((s.home==="red"?"RED":"BLUE")+" HOLD", p.x, p.y-20);
+  } else {
+    g.fillStyle="#efe7d2"; g.strokeStyle="#2c2414"; g.lineWidth=2;
+    g.beginPath(); g.arc(p.x,p.y,7,0,7); g.fill(); g.stroke();
+    if(s.isTower){ g.strokeStyle="#9a6a1a"; g.lineWidth=2; g.beginPath(); g.arc(p.x,p.y,12,0,7); g.setLineDash([2,3]); g.stroke(); g.setLineDash([]); }
+  }
+}
+// label the reservoir
+g.fillStyle="#dfeaf5"; g.font="italic 15px Georgia,serif"; g.textAlign="center";
+g.fillText("R E S E R V O I R", px(0.82), py(0.55));
+
+// ---- north arrow ----
+const nx0=mapX+mapW-34, ny0=mapY+34;
+g.fillStyle="#2c2414"; g.beginPath(); g.moveTo(nx0,ny0-20); g.lineTo(nx0-7,ny0+8); g.lineTo(nx0,ny0+2); g.lineTo(nx0+7,ny0+8); g.closePath(); g.fill();
+g.font="bold 12px ui-sans-serif,sans-serif"; g.textAlign="center"; g.fillText("N", nx0, ny0+22);
+
+// ---- scale bar (1 km) ----
+const kmPx = (1000/span)*mapW, sbx=mapX+14, sby=mapY+mapH-16;
+g.fillStyle="#2c2414"; g.fillRect(sbx,sby,kmPx,5); g.fillStyle="#efe7d2"; g.fillRect(sbx,sby,kmPx/2,5); g.strokeStyle="#2c2414"; g.lineWidth=1; g.strokeRect(sbx,sby,kmPx,5);
+g.fillStyle="#2c2414"; g.font="11px ui-monospace,monospace"; g.textAlign="left"; g.fillText("0", sbx-2, sby-6); g.fillText("1 km", sbx+kmPx-12, sby-6);
+
+// ---- legend + cartouche (bottom strip) ----
+const ly=mapY+mapH+34;
+g.textAlign="left"; g.font="bold 13px ui-sans-serif,sans-serif"; g.fillStyle="#2c2414";
+g.fillText("LEGEND", mapX, ly);
+g.font="12px ui-sans-serif,sans-serif";
+function key(x,y,draw,label){ draw(x,y); g.fillStyle="#2c2414"; g.fillText(label,x+18,y+4); }
+let lx=mapX+76;
+key(lx,ly-4,(x,y)=>{g.fillStyle="#b8341f";g.beginPath();g.moveTo(x,y-7);g.lineTo(x+7,y);g.lineTo(x,y+7);g.lineTo(x-7,y);g.closePath();g.fill();},"stronghold"); lx+=130;
+key(lx,ly-4,(x,y)=>{g.fillStyle="#efe7d2";g.strokeStyle="#2c2414";g.lineWidth=2;g.beginPath();g.arc(x,y,6,0,7);g.fill();g.stroke();},"sector"); lx+=110;
+key(lx,ly-4,(x,y)=>{g.strokeStyle="#9a2b1a";g.lineWidth=2.4;g.setLineDash([6,5]);g.beginPath();g.moveTo(x-9,y);g.lineTo(x+9,y);g.stroke();g.setLineDash([]);},"ravine (bridge point)"); lx+=190;
+key(lx,ly-4,(x,y)=>{g.fillStyle="#2e6090";g.fillRect(x-8,y-5,16,10);},"reservoir / creek");
+
+// cartouche (title block)
+const cy0=mapY+mapH+64, cw=mapW;
+g.strokeStyle="#2c2414"; g.lineWidth=2; g.strokeRect(mapX,cy0,cw,46);
+g.fillStyle="#2c2414"; g.textAlign="left";
+g.font="bold 22px Georgia,serif"; g.fillText("THE FORGE — FIELD SURVEY", mapX+14, cy0+30);
+g.font="13px ui-monospace,monospace"; g.textAlign="right";
+g.fillText("Lake San Antonio, Bradley CA  ·  35.80°N 120.88°W  ·  SRTM DEM  ·  "+sectors.length+" sectors / "+field.gatedEdges.length+" chokepoints", mapX+cw-14, cy0+29);
+</script></body></html>
