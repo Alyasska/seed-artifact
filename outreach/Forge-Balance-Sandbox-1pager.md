@@ -2,7 +2,7 @@
 
 *A design sample for SEED's Game Systems & Mechanics Designer role.*
 Aliaskar Bekishev · github.com/Alyasska · alyasska.github.io · lyasskar@gmail.com
-**Live:** `<alyasska.github.io/forge>` · **Code:** github.com/Alyasska/forge-balance-sandbox
+**Live:** https://alyasska.github.io/seed-artifact/ · **Code:** github.com/Alyasska/seed-artifact
 
 ---
 

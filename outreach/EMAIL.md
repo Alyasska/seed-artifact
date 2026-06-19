@@ -12,8 +12,8 @@ field game, so I model one system and run thousands of matches headless to read
 the balance *before* anyone books a venue. Same rules engine drives the live match
 and the Monte Carlo — so it's a designer/GM pre-flight rig, not a toy.
 
-live demo: <alyasska.github.io/forge — deploy + drop the link here>
-code: github.com/Alyasska/forge-balance-sandbox  (plain JS, no build step, runs on Pages)
+live demo: https://alyasska.github.io/seed-artifact/   (live once Pages finishes building)
+code: github.com/Alyasska/seed-artifact  (plain JS, no build step, runs on Pages)
 
 A few things it already turned up, fwiw:
 
